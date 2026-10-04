@@ -1,0 +1,20 @@
+[worldserver]
+
+########################################
+# mod-race-class-combos configuration
+########################################
+#
+# Unlocks additional race/class combinations. The combinations are added by this
+# module's SQL (start position + action bar). Starting skills/spells apply via the
+# existing race/class bitmask rows, so no per-combo skill data is needed.
+#
+# IMPORTANT: the client must also load a patched CharBaseInfo.dbc (shipped as a
+# separate client patch) to show the new combinations in character creation.
+#
+
+#
+#    RaceClassCombos.Announce
+#        1 = log a line at startup noting the module is active. 0 = quiet.
+#        Default: 1
+#
+RaceClassCombos.Announce = 1
