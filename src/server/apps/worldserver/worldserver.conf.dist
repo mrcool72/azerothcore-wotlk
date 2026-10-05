@@ -4954,3 +4954,67 @@ Cluster.IsCrossrealm=0
 # CLUSTER SETTINGS END                                                                            #
 #                                                                                                 #
 ###################################################################################################
+
+
+###################################################################################################
+#                                                                                                 #
+# AUTONOMOUS AI SETTINGS                                                                          #
+#                                                                                                 #
+###################################################################################################
+
+#
+#    AutonomousAI.Enable
+#        Description: Enables the external Autonomous AI server integration.
+#                     When disabled, the built-in Autonomous AI remains available but no
+#                     external AI server connection is started.
+#        Default: 0 - (Disabled)
+#                 1 - (Enabled)
+#
+
+AutonomousAI.Enable = 0
+
+#
+#    AutonomousAI.Host
+#        Description: Hostname or IP address of the separate Autonomous AI server.
+#        Default: "127.0.0.1"
+#
+
+AutonomousAI.Host = "127.0.0.1"
+
+#
+#    AutonomousAI.Port
+#        Description: TCP port used by the separate Autonomous AI server.
+#        Default: 8765
+#
+
+AutonomousAI.Port = 8765
+
+#
+#    AutonomousAI.Token
+#        Description: Optional shared authentication token. When set, it is included in
+#                     each perception request as the "auth_token" JSON field.
+#        Default: ""
+#
+
+AutonomousAI.Token = ""
+
+#
+#    AutonomousAI.OverrideProfileEndpoint
+#        Description: When enabled, the global Host/Port above override per-bot endpoint
+#                     values stored in autonomous_bot_config.
+#        Default: 1 - (Use global Host/Port)
+#                 0 - (Use each bot profile Host/Port)
+#
+
+AutonomousAI.OverrideProfileEndpoint = 1
+
+#
+#    AutonomousAI.RequestInterval
+#        Description: Minimum interval in milliseconds between perception requests for each bot.
+#        Default: 1500
+#
+
+AutonomousAI.RequestInterval = 1500
+
+#
+###################################################################################################
