@@ -1,4 +1,5 @@
 ﻿#include "AutonomousBotMgr.h"
+#include "Config.h"
 #include "AutonomousBotController.h"
 #include "AutonomousBotProfileStore.h"
 #include "AutonomousHeadlessPlayer.h"
@@ -48,10 +49,22 @@ namespace AutonomousAI
         AutonomousBotProfile profile;
         if (sAutonomousBotProfileStore.Get(guid, profile))
         {
-            itr->second->ConfigureExternalAI(profile.host, profile.port);
+            bool const externalEnabled = sConfigMgr->GetOption<bool>("AutonomousAI.Enable", false, false);
+            bool const overrideProfileEndpoint = sConfigMgr->GetOption<bool>("AutonomousAI.OverrideProfileEndpoint", true, false);
+            std::string const globalHost = sConfigMgr->GetOption<std::string>("AutonomousAI.Host", "127.0.0.1", false);
+            uint16 const globalPort = sConfigMgr->GetOption<uint16>("AutonomousAI.Port", 8765, false);
+            std::string const token = sConfigMgr->GetOption<std::string>("AutonomousAI.Token", "", false);
+            uint32 const requestInterval = sConfigMgr->GetOption<uint32>("AutonomousAI.RequestInterval", 1500, false);
+
+            std::string host = overrideProfileEndpoint ? globalHost : profile.host;
+            uint16 port = overrideProfileEndpoint ? globalPort : profile.port;
+
+            itr->second->ConfigureExternalAI(std::move(host), port, token);
+            itr->second->SetExternalAIRequestInterval(requestInterval);
             itr->second->SetPersonality(profile.personality);
             itr->second->SetRole(profile.role);
-            if (startIfEnabled && profile.enabled)
+
+            if (startIfEnabled && profile.enabled && externalEnabled)
                 itr->second->StartExternalAI();
         }
 
