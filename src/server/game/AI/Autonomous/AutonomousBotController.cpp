@@ -4,6 +4,7 @@
  */
 
 #include "AutonomousBotController.h"
+#include "Config.h"
 #include "AutonomousQuestCampaignManager.h"
 #include "AutonomousCampaignExecutor.h"
 #include "AutonomousCampaignNavigationManager.h"
@@ -1026,7 +1027,7 @@ namespace AutonomousAI
 
     bool AutonomousBotController::StartExternalAI()
     {
-        if (!_transport)
+        if (!_transport || !sConfigMgr->GetOption<bool>("AutonomousAI.Enable", false, false))
             return false;
 
         _externalAIEnabled = true;
