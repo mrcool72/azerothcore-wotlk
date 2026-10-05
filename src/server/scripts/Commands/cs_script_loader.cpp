@@ -18,6 +18,8 @@
 // This is where scripts' loading functions should be declared:
 void AddSC_account_commandscript();
 void AddSC_achievement_commandscript();
+void AddSC_autonomousbot_commandscript();
+void AddSC_autonomousbot_lifecycle();
 void AddSC_arena_commandscript();
 void AddSC_autobroadcast_commandscript();
 void AddSC_bag_commandscript();
@@ -77,6 +79,8 @@ void AddCommandsScripts()
 {
     AddSC_account_commandscript();
     AddSC_achievement_commandscript();
+    AddSC_autonomousbot_commandscript();
+    AddSC_autonomousbot_lifecycle();
     AddSC_arena_commandscript();
     AddSC_autobroadcast_commandscript();
     AddSC_bag_commandscript();
