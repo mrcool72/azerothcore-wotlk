@@ -1013,10 +1013,15 @@ namespace AutonomousAI
             _brain->SetPersonality(std::move(personality));
     }
 
-    void AutonomousBotController::ConfigureExternalAI(std::string host, uint16 port)
+    void AutonomousBotController::ConfigureExternalAI(std::string host, uint16 port, std::string token)
     {
         if (_transport)
-            _transport->Configure(std::move(host), port);
+            _transport->Configure(std::move(host), port, std::move(token));
+    }
+
+    void AutonomousBotController::SetExternalAIRequestInterval(uint32 milliseconds)
+    {
+        _requestTimer = milliseconds;
     }
 
     bool AutonomousBotController::StartExternalAI()
