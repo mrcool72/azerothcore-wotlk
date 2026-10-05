@@ -69,7 +69,8 @@ namespace AutonomousAI
         uint64 GetPreferredCompanionGuid() const;
     char const* GetRole() const;
 
-        void ConfigureExternalAI(std::string host, uint16 port);
+        void ConfigureExternalAI(std::string host, uint16 port, std::string token = {});
+        void SetExternalAIRequestInterval(uint32 milliseconds);
         bool StartExternalAI();
         void StopExternalAI();
 
