@@ -17,6 +17,7 @@ namespace AutonomousAI
     ExternalAITransport::ExternalAITransport() :
         _host("127.0.0.1"),
         _port(8765),
+        _token(),
         _running(false),
         _worker(),
         _queueMutex(),
@@ -31,11 +32,12 @@ namespace AutonomousAI
         Stop();
     }
 
-    void ExternalAITransport::Configure(std::string host, uint16 port)
+    void ExternalAITransport::Configure(std::string host, uint16 port, std::string token)
     {
         std::lock_guard<std::mutex> lock(_queueMutex);
         _host = std::move(host);
         _port = port;
+        _token = std::move(token);
     }
 
     bool ExternalAITransport::Start()
@@ -116,6 +118,12 @@ namespace AutonomousAI
                 return false;
 
             std::string payload = request.message;
+            if (!_token.empty() && !payload.empty() && payload.back() == '}')
+            {
+                payload.pop_back();
+                payload += ",\"auth_token\":\"" + EscapeJson(_token) + "\"}";
+            }
+
             if (payload.empty() || payload.back() != '\n')
                 payload.push_back('\n');
 
