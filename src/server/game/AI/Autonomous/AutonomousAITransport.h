@@ -29,7 +29,7 @@ namespace AutonomousAI
         ExternalAITransport(ExternalAITransport const&) = delete;
         ExternalAITransport& operator=(ExternalAITransport const&) = delete;
 
-        void Configure(std::string host, uint16 port);
+        void Configure(std::string host, uint16 port, std::string token = {});
         bool Start();
         void Stop();
 
@@ -59,6 +59,7 @@ namespace AutonomousAI
 
         std::string _host;
         uint16 _port;
+        std::string _token;
 
         std::atomic<bool> _running;
         std::thread _worker;
