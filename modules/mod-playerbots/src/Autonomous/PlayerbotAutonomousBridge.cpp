@@ -14,6 +14,55 @@ namespace AutonomousAI::PlayerbotBridge
         return player && sPlayerbotsMgr.GetPlayerbotAI(player) != nullptr;
     }
 
+    bool StartQuest(Player* player, std::uint32_t questId)
+    {
+        if (!IsAvailable(player) || !questId)
+            return false;
+
+        std::string response = sPlayerbotsMgr.GetPlayerbotAI(player)->HandleRemoteCommand(
+            "rpg do quest " + std::to_string(questId));
+        return !response.empty();
+    }
+
+    bool AcceptAvailableQuests(Player* player)
+    {
+        if (!IsAvailable(player))
+            return false;
+
+        std::string response = sPlayerbotsMgr.GetPlayerbotAI(player)->HandleRemoteCommand("quest fetch");
+        return !response.empty();
+    }
+
+    bool CompleteQuest(Player* player, std::uint32_t questId)
+    {
+        if (!IsAvailable(player) || !questId)
+            return false;
+
+        std::string response = sPlayerbotsMgr.GetPlayerbotAI(player)->HandleRemoteCommand(
+            "quest complete " + std::to_string(questId));
+        return !response.empty();
+    }
+
+    bool ContinueQuestWork(Player* player)
+    {
+        if (!IsAvailable(player))
+            return false;
+
+        PlayerbotAI* botAI = sPlayerbotsMgr.GetPlayerbotAI(player);
+        return botAI->DoSpecificAction("new rpg do quest", Event(), true);
+    }
+
+    bool ContinueTravel(Player* player)
+    {
+        if (!IsAvailable(player))
+            return false;
+
+        PlayerbotAI* botAI = sPlayerbotsMgr.GetPlayerbotAI(player);
+        bool choseTarget = botAI->DoSpecificAction("choose travel target", Event(), true);
+        bool traveled = botAI->DoSpecificAction("travel", Event(), true);
+        return choseTarget || traveled;
+    }
+
     bool EngageTarget(Player* player, std::uint64_t targetGuid)
     {
         if (!player || !targetGuid)
