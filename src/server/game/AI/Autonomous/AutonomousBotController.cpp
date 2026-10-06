@@ -1080,7 +1080,8 @@ namespace AutonomousAI
         switch (action.type)
         {
             case ActionType::QUEST:
-                StartQuest(action.questId);
+                if (!PlayerbotBridge::StartQuest(_player, action.questId))
+                    StartQuest(action.questId);
                 break;
 
             case ActionType::MOVE_TO:
@@ -1141,6 +1142,10 @@ namespace AutonomousAI
                 break;
 
             case ActionType::ACCEPT_QUEST:
+                if (PlayerbotBridge::AcceptAvailableQuests(_player))
+                    break;
+                [[fallthrough]];
+
             case ActionType::TALK_TO:
             {
                 if (!action.questId || !action.targetGuid)
@@ -1171,6 +1176,9 @@ namespace AutonomousAI
 
             case ActionType::COMPLETE_QUEST:
             {
+                if (PlayerbotBridge::CompleteQuest(_player, action.questId))
+                    break;
+
                 if (!action.questId || !action.targetGuid)
                     break;
 
