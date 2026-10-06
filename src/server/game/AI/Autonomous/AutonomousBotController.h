@@ -107,6 +107,7 @@ namespace AutonomousAI
         std::unique_ptr<AutonomousWorldRouteManager> _worldRouteManager;
         bool _externalAIEnabled;
         uint32 _requestTimer;
+        uint32 _playerbotRpgTimer;
     };
 }
 
