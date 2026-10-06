@@ -85,7 +85,8 @@ namespace AutonomousAI
         _questKnowledgeManager(&sAutonomousQuestKnowledgeMgr),
         _worldRouteManager(std::make_unique<AutonomousWorldRouteManager>(_player)),
         _externalAIEnabled(false),
-        _requestTimer(0)
+        _requestTimer(0),
+        _playerbotRpgTimer(0)
     {
     }
 
@@ -111,6 +112,26 @@ namespace AutonomousAI
             _combatManager->Update(diff);
 
         bool externalActive = _externalAIEnabled && _transport && _transport->IsRunning();
+
+        // Let Playerbot's mature RPG engine handle routine quest/travel execution.
+        // Autonomous remains the decision layer and its own managers remain the fallback.
+        if (!externalActive && sConfigMgr->GetOption<bool>("AutonomousAI.UsePlayerbotRpg", true, false) &&
+            PlayerbotBridge::IsAvailable(_player))
+        {
+            if (_playerbotRpgTimer > diff)
+                _playerbotRpgTimer -= diff;
+            else
+            {
+                _playerbotRpgTimer = 1500;
+                if (!_player->IsInCombat())
+                {
+                    if (!_perception.activeQuests.empty())
+                        PlayerbotBridge::ContinueQuestWork(_player);
+                    else
+                        PlayerbotBridge::ContinueTravel(_player);
+                }
+            }
+        }
 
         if (_dungeonManager)
             _dungeonManager->Update(diff, _perception, externalActive);
