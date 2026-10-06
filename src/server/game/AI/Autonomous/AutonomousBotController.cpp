@@ -4,6 +4,7 @@
  */
 
 #include "AutonomousBotController.h"
+#include "AutonomousPlayerbotBridge.h"
 #include "Config.h"
 #include "AutonomousQuestCampaignManager.h"
 #include "AutonomousCampaignExecutor.h"
@@ -103,7 +104,10 @@ namespace AutonomousAI
         if (_questExecutor)
             _questExecutor->Update(diff, _perception);
 
-        if (_combatManager)
+        bool usePlayerbotCombat = sConfigMgr->GetOption<bool>("AutonomousAI.UsePlayerbotCombat", true, false);
+        bool playerbotCombat = usePlayerbotCombat && PlayerbotBridge::IsAvailable(_player);
+
+        if (_combatManager && !playerbotCombat)
             _combatManager->Update(diff);
 
         bool externalActive = _externalAIEnabled && _transport && _transport->IsRunning();
@@ -1125,6 +1129,9 @@ namespace AutonomousAI
                 break;
 
             case ActionType::ATTACK:
+                if (action.targetGuid && PlayerbotBridge::EngageTarget(_player, action.targetGuid))
+                    break;
+
                 if (action.targetGuid)
                 {
                     if (Unit* target = ObjectAccessor::GetUnit(*_player, ([&]() { ObjectGuid g; return ObjectGuid(action.targetGuid); })()))
