@@ -5016,6 +5016,7 @@ AutonomousAI.OverrideProfileEndpoint = 1
 
 AutonomousAI.RequestInterval = 1500
 AutonomousAI.UsePlayerbotCombat = 1
+AutonomousAI.UsePlayerbotRpg = 1
 
 #
 ###################################################################################################
